@@ -1,4 +1,38 @@
 {
+    // Use system Python environment
     "python-envs.defaultEnvManager": "ms-python.python:system",
-    "python-envs.pythonProjects": []
+    // Enable formatting with black (commonly used in modern Python projects)
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    // Run Black formatter before saving and auto-save changes
+    "editor.formatOnSaveMode": "modifications",
+    // Organize imports (e.g., with isort or Pylint) on save
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "files.autoSave": "onFocusChange",
+    // Set default interpreter path if needed (optional, can be removed if not required)
+    "python.defaultInterpreterPath": "/usr/bin/python3",
+    // Enable notebook support and trust
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "jupyter.askForKernelRestart": false,
+    // Exclude __pycache__ and .venv from file explorer
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.venv": true
+    },
+    // Python analysis settings for better performance and type checking
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.useLibraryCodeForTypes": true,
+    "ruff.organizeImports": true
+    ,"python.analysis.diagnosticMode": "workspace"
+    ,"python.envFile": "${workspaceFolder}/.env"
+    ,"python.testing.pytestEnabled": true
+    ,"python.testing.unittestEnabled": false
+    ,"python.testing.pytestArgs": ["src"]
+    ,"files.trimTrailingWhitespace": true
+    ,"files.insertFinalNewline": true
+    ,"editor.tabSize": 4
+    ,"editor.detectIndentation": true
 }

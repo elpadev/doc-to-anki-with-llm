@@ -84,7 +84,8 @@ class QuestionAndAnswerListFormat(BaseModel):
 def validate_pdf_path(pdf_path: str) -> None:
     """Validate that the PDF file exists and is a file."""
     if not os.path.isfile(pdf_path):
-        logging.error(f"PDF file '{pdf_path}' does not exist or is not a file.")
+        logging.error(
+            "PDF file '%s' does not exist or is not a file.", pdf_path)
         sys.exit(1)
 
 
@@ -99,10 +100,10 @@ def add_notes_from_pages(pages, chat_model, my_model, my_deck) -> int:
         try:
             resp = chat_model.invoke(messages)
         except Exception as e:
-            logging.warning(f"LLM invocation failed for a page: {e}")
+            logging.warning("LLM invocation failed for a page: %s", e)
             continue
         for qa in resp.qa_list:
-            logging.info(f"Q: {qa.question}\nA: {qa.answer}")
+            logging.info("Q: %s\nA: %s", qa.question, qa.answer)
             try:
                 my_note = genanki.Note(
                     model=my_model,
@@ -111,7 +112,7 @@ def add_notes_from_pages(pages, chat_model, my_model, my_deck) -> int:
                 my_deck.add_note(my_note)
                 note_count += 1
             except Exception as e:
-                logging.warning(f"Failed to add note: {e}")
+                logging.warning("Failed to add note: %s", e)
     return note_count
 
 
@@ -143,7 +144,7 @@ def main():
     try:
         pages = asyncio.run(load_pdf_pages(args.pdf))
     except Exception as e:
-        logging.error(f"Error loading PDF: {e}")
+        logging.error("Error loading PDF: %s", e)
         sys.exit(1)
 
     # Select page range if specified
@@ -153,17 +154,17 @@ def main():
     if args.start_page is not None:
         if args.start_page < 1 or args.start_page > total_pages:
             logging.error(
-                f"Start page {args.start_page} is out of range (1-{total_pages})")
+                "Start page %d is out of range (1-%d)", args.start_page, total_pages)
             sys.exit(1)
         start_idx = args.start_page - 1
     if args.end_page is not None:
         if args.end_page < 1 or args.end_page > total_pages:
             logging.error(
-                f"End page {args.end_page} is out of range (1-{total_pages})")
+                "End page %d is out of range (1-%d)", args.end_page, total_pages)
             sys.exit(1)
         end_idx = args.end_page
     if start_idx >= end_idx:
-        logging.error(f"Start page must be less than or equal to end page.")
+        logging.error("Start page must be less than or equal to end page.")
         sys.exit(1)
     selected_pages = pages[start_idx:end_idx]
 
@@ -175,7 +176,7 @@ def main():
     else:
         genanki.Package(my_deck).write_to_file(args.output)
         logging.info(
-            f"Anki deck written to {args.output} with {note_count} notes.")
+            "Anki deck written to %s with %d notes.", args.output, note_count)
 
 
 if __name__ == '__main__':

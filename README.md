@@ -19,7 +19,7 @@ Generate Anki decks from PDF documents using LLM-generated questions and answers
 
 1. **Clone the repository:**
 	```bash
-	git clone https://github.com/yourusername/doc-to-anki-with-llm.git
+	git clone https://github.com/elpadev/doc-to-anki-with-llm.git
 	cd doc-to-anki-with-llm
 	```
 

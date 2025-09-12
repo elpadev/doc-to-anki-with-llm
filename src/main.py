@@ -117,7 +117,7 @@ def main():
 
     validate_pdf_path(args.pdf)
     get_openai_api_key()
-    chat_model = init_chat_model("gpt-4o-mini", model_provider="openai").with_structured_output(QuestionAndAnswerListFormat)
+    chat_model = init_chat_model("gpt-5-mini", model_provider="openai").with_structured_output(QuestionAndAnswerListFormat)
 
     model_id = random.randrange(1 << 30, 1 << 31)
     deck_id = random.randrange(1 << 30, 1 << 31)

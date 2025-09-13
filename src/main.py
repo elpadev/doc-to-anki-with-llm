@@ -16,10 +16,10 @@ import dotenv
 import genanki
 from langchain.chat_models import init_chat_model
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
-import prompt
+from prompt import PROMPT_HUMAN_MESSAGE, PROMPT_SYSTEM_MESSAGE
 
 dotenv.load_dotenv()
 
@@ -93,10 +93,15 @@ def add_notes_from_pages(pages, chat_model, my_model, my_deck) -> int:
     """Process pages, generate Q&A, and add notes to the deck. Returns number of notes added."""
     note_count = 0
     for page in pages:
-        messages = [
-            SystemMessage(content=prompt.prompt),
-            HumanMessage(content=page.page_content)
-        ]
+        prompt_template = ChatPromptTemplate([
+            ("system", PROMPT_SYSTEM_MESSAGE),
+            ("user", PROMPT_HUMAN_MESSAGE)
+        ])
+        messages = prompt_template.invoke({
+            "current_page": page.page_content,
+            "previous_page": pages[pages.index(page) - 1].page_content if pages.index(page) > 0 else None,
+            "next_page": pages[pages.index(page) + 1].page_content if pages.index(page) < len(pages) - 1 else None
+        })
         try:
             resp = chat_model.invoke(messages)
         except Exception as e:

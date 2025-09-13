@@ -1,0 +1,2 @@
+model_provider: groq # LangChain LLM model provider, e.g. 'openai'
+model_name: openai/gpt-oss-120b # LLM model name, e.g. 'gpt-5-mini'

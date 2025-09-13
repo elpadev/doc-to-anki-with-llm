@@ -1,4 +1,3 @@
-
 # doc-to-anki-with-llm
 
 Generate Anki decks from PDF documents using LLM-generated questions and answers.
@@ -13,27 +12,28 @@ Generate Anki decks from PDF documents using LLM-generated questions and answers
 - **PDF Support:** Processes each page of a PDF as a separate context for flashcard generation.
 - **Customizable Decks:** Set the deck name and output file.
 - **Page Range Selection:** Choose which pages of the PDF to process.
-- **OpenAI API Integration:** Uses OpenAI models (e.g., GPT-4o-mini) for Q&A generation.
+- **OpenAI API Integration:** Uses OpenAI models (e.g., GPT-5-mini) for Q&A generation.
+- **Error Handling:** Logs warnings for failed LLM invocations or note additions.
 
 ## Installation
 
 1. **Clone the repository:**
-	```bash
-	git clone https://github.com/elpadev/doc-to-anki-with-llm.git
-	cd doc-to-anki-with-llm
-	```
+    ```bash
+    git clone https://github.com/elpadev/doc-to-anki-with-llm.git
+    cd doc-to-anki-with-llm
+    ```
 
 2. **Install dependencies:**
-	```bash
-	pip install -r requirements.txt
-	```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 3. **Set up your OpenAI API key:**
-	- Create a `.env` file in the project root (optional) and add:
-	  ```env
-	  OPENAI_API_KEY=your_openai_api_key_here
-	  ```
-	- Or, you will be prompted for your API key at runtime.
+    - Create a `.env` file in the project root (optional) and add:
+      ```env
+      OPENAI_API_KEY=your_openai_api_key_here
+      ```
+    - Or, you will be prompted for your API key at runtime.
 
 ## Usage
 
@@ -58,6 +58,11 @@ Generate an Anki deck from pages 10 to 20 of `mybook.pdf`:
 ```bash
 python src/main.py mybook.pdf --deck-name "My Book Deck" --output mybook.apkg --start-page 10 --end-page 20
 ```
+
+### Notes
+
+- If the `--start-page` or `--end-page` arguments are out of range, the script will log an error and exit.
+- If no notes are added to the deck (e.g., due to LLM invocation failures), a warning will be logged.
 
 ## Environment Variables
 

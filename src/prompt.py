@@ -20,6 +20,6 @@ Output only the list of flashcards in Q/A format.
 """
 
 PROMPT_HUMAN_MESSAGE = """Actual page (content to create flashcards from): '''{current_page}'''
-'''Previous page (only use if needed): '''{previous_page}'''
-'''Next page (only use if needed): '''{next_page}'''
+Previous page (only use if needed): '''{previous_page}'''
+Next page (only use if needed): '''{next_page}'''
 """

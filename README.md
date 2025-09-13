@@ -35,6 +35,13 @@ Generate Anki decks from PDF documents using LLM-generated questions and answers
       ```
     - Or, you will be prompted for your API key at runtime.
 
+4. **Adapt the `config.yaml` file:**
+    - Update the `model_provider` and `model_name` fields in `config.yaml` to match your desired LLM configuration. See LangChain documentation for supported model providers. For example:
+      ```yaml
+      model_provider: openai
+      model_name: gpt-4
+      ```
+
 ## Usage
 
 Run the script from the command line:

@@ -14,6 +14,7 @@ from typing import List
 
 import dotenv
 import genanki
+import yaml
 from langchain.chat_models import init_chat_model
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import ChatPromptTemplate
@@ -137,8 +138,14 @@ def main():
 
     validate_pdf_path(args.pdf)
     get_openai_api_key()
+
+    # Load config
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
     chat_model = init_chat_model(
-        "gpt-5-mini", model_provider="openai").with_structured_output(QuestionAndAnswerListFormat)
+        config["model_name"],
+        model_provider=config["model_provider"]).with_structured_output(QuestionAndAnswerListFormat)
 
     model_id = random.randrange(1 << 30, 1 << 31)
     deck_id = random.randrange(1 << 30, 1 << 31)

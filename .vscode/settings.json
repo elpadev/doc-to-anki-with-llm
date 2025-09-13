@@ -1,6 +1,4 @@
 {
-    // Use system Python environment
-    "python-envs.defaultEnvManager": "ms-python.python:system",
     // Enable formatting with black (commonly used in modern Python projects)
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
@@ -8,14 +6,12 @@
     "editor.formatOnSaveMode": "modifications",
     // Organize imports (e.g., with isort or Pylint) on save
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": "explicit"
     },
     "files.autoSave": "onFocusChange",
     // Set default interpreter path if needed (optional, can be removed if not required)
-    "python.defaultInterpreterPath": "/usr/bin/python3",
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
     // Enable notebook support and trust
-    "jupyter.notebookFileRoot": "${workspaceFolder}",
-    "jupyter.askForKernelRestart": false,
     // Exclude __pycache__ and .venv from file explorer
     "files.exclude": {
         "**/__pycache__": true,

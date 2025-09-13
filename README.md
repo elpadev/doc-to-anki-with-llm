@@ -71,7 +71,7 @@ python src/main.py mybook.pdf --deck-name "My Book Deck" --output mybook.apkg --
 ## How It Works
 
 1. Loads the specified PDF and (optionally) selects a page range.
-2. For each page, sends the content to the LLM with a prompt to generate Q&A pairs, including the previous and next pages as additional context. This increases token usage to approximately three times the number of pages processed.
+2. For each page, sends the content to the LLM with a prompt to generate Q&A pairs, including the previous and next pages as additional context. This **increases token usage** to approximately **three times** the number of pages processed.
 3. Structures the Q&A pairs as Anki notes and adds them to a deck.
 4. Exports the deck as an `.apkg` file, ready to import into Anki.
 

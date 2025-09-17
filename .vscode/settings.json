@@ -30,5 +30,8 @@
     ,"files.trimTrailingWhitespace": true
     ,"files.insertFinalNewline": true
     ,"editor.tabSize": 4
-    ,"editor.detectIndentation": true
+    ,
+    "editor.detectIndentation": true,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
 }

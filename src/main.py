@@ -5,7 +5,6 @@ Main script to generate Anki decks from documents using LLMs.
 
 import argparse
 import asyncio
-import getpass
 import logging
 import os
 import random
@@ -19,21 +18,12 @@ from langchain.chat_models import init_chat_model
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-
+from langchain_docling.loader import DoclingLoader
 from prompt import PROMPT_HUMAN_MESSAGE, PROMPT_SYSTEM_MESSAGE
 
 dotenv.load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
-
-
-def get_openai_api_key() -> str:
-    """Prompt for OpenAI API key if not set in environment."""
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        api_key = getpass.getpass("Enter API key for OpenAI: ")
-        os.environ["OPENAI_API_KEY"] = api_key
-    return api_key
 
 
 def create_anki_model(model_id: int) -> genanki.Model:
@@ -60,13 +50,12 @@ def create_anki_deck(deck_id: int, deck_name: str) -> genanki.Deck:
     return genanki.Deck(deck_id, deck_name)
 
 
-async def load_pdf_pages(file_path: str) -> List:
-    """Asynchronously load pages from a PDF file."""
-    loader = PyPDFLoader(file_path)
-    pages = []
-    async for page in loader.alazy_load():
-        pages.append(page)
-    return pages
+async def load_documents(source: str):
+    """Asynchronously load documents from a Docling source."""
+    FILE_PATH = source
+    loader = DoclingLoader(file_path=FILE_PATH)
+    docs = loader.load()
+    return docs
 
 
 class QuestionAndAnswerFormat(BaseModel):
@@ -80,15 +69,6 @@ class QuestionAndAnswerListFormat(BaseModel):
     """Structure for a list of flashcards."""
     qa_list: List[QuestionAndAnswerFormat] = Field(
         description="A list of question and answer pairs")
-
-
-def validate_pdf_path(pdf_path: str) -> None:
-    """Validate that the PDF file exists and is a file."""
-    if not os.path.isfile(pdf_path):
-        logging.error(
-            "PDF file '%s' does not exist or is not a file.", pdf_path)
-        sys.exit(1)
-
 
 def add_notes_from_pages(pages, chat_model, my_model, my_deck) -> int:
     """Process pages, generate Q&A, and add notes to the deck. Returns number of notes added."""
@@ -125,19 +105,35 @@ def add_notes_from_pages(pages, chat_model, my_model, my_deck) -> int:
 def main():
     parser = argparse.ArgumentParser(
         description="Generate Anki deck from PDF using LLM.")
-    parser.add_argument('pdf', help='Path to the PDF file to process')
     parser.add_argument(
-        '--deck-name', default='Country Capitals', help='Name of the Anki deck')
-    parser.add_argument('--output', default='output.apkg',
-                        help='Output Anki package file')
-    parser.add_argument('--start-page', type=int, default=None,
-                        help='Start page number (1-based, inclusive)')
-    parser.add_argument('--end-page', type=int, default=None,
-                        help='End page number (1-based, inclusive)')
+        '--deck-name',
+        help='Name of the Anki deck',
+        required=True
+    )
+    parser.add_argument(
+        '--output',
+        default='output.apkg',
+        help='Output Anki package file'
+    )
+    parser.add_argument(
+        '--start-page',
+        type=int,
+        default=None,
+        help='Start page number (1-based, inclusive)'
+    )
+    parser.add_argument(
+        '--end-page',
+        type=int,
+        default=None,
+        help='End page number (1-based, inclusive)'
+    )
+    parser.add_argument(
+        '--source',
+        type=str,
+        help='Source path for the document, can be a URL or local path',
+        required=True
+    )
     args = parser.parse_args()
-
-    validate_pdf_path(args.pdf)
-    get_openai_api_key()
 
     # Load config
     with open("config.yaml", "r", encoding="utf-8") as f:
@@ -154,7 +150,7 @@ def main():
 
     # Load PDF pages (async)
     try:
-        pages = asyncio.run(load_pdf_pages(args.pdf))
+        pages = asyncio.run(load_documents(args.source))
     except Exception as e:
         logging.error("Error loading PDF: %s", e)
         sys.exit(1)

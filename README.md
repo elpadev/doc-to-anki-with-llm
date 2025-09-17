@@ -47,23 +47,23 @@ Generate Anki decks from PDF documents using LLM-generated questions and answers
 Run the script from the command line:
 
 ```bash
-python src/main.py <pdf-file> [--deck-name DECK] [--output FILE] [--start-page N] [--end-page M]
+python src/main.py --source <source> --deck-name DECK [--output FILE] [--start-page N] [--end-page M]
 ```
 
 ### Arguments
 
-- `<pdf-file>`: Path to the PDF file to process (required)
-- `--deck-name`: Name of the Anki deck (default: `Country Capitals`)
-- `--output`: Output Anki package file (default: `output.apkg`)
-- `--start-page`: Start page number (1-based, inclusive)
-- `--end-page`: End page number (1-based, inclusive)
+- `--source`: Path to the document source (required). This can be a local file path or a URL.
+- `--deck-name`: Name of the Anki deck (required).
+- `--output`: Output Anki package file (default: `output.apkg`).
+- `--start-page`: Start page number (1-based, inclusive).
+- `--end-page`: End page number (1-based, inclusive).
 
 ### Example
 
 Generate an Anki deck from pages 10 to 20 of `mybook.pdf`:
 
 ```bash
-python src/main.py mybook.pdf --deck-name "My Book Deck" --output mybook.apkg --start-page 10 --end-page 20
+python src/main.py --source mybook.pdf --deck-name "My Book Deck" --output mybook.apkg --start-page 10 --end-page 20
 ```
 
 ### Notes
